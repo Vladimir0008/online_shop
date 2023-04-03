@@ -19,19 +19,19 @@ public class ProductController {
         return productService.createProduct(productDTO);
     }
 
-    @DeleteMapping(value = "/delete")
+    @DeleteMapping("/delete")
     public void delete(@RequestParam(value = "id") Long id) {
 
         productService.deleteProduct(id);
     }
 
-    @GetMapping(value = "/get_product/{id}")
+    @GetMapping("/get/{id}")
     public ProductDTO getProduct(@PathVariable Long id) {
 
         return productService.getProductById(id);
     }
 
-    @GetMapping(value = "/get_products")
+    @GetMapping("/get_all")
     public List<ProductDTO> getProducts() {
 
         return productService.getAllProducts();
