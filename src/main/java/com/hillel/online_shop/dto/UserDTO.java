@@ -1,8 +1,9 @@
 package com.hillel.online_shop.dto;
 
-import com.hillel.online_shop.entity.Cart;
-import jakarta.persistence.OneToOne;
+import com.hillel.online_shop.entity.User;
+import lombok.Data;
 
+@Data
 public class UserDTO {
 
     private Long id;
@@ -11,8 +12,14 @@ public class UserDTO {
 
     private String lastName;
 
+    private String login;
+
+    private String password;
+
     private int age;
 
     private String email;
+
+    private User.Role role;
 
 }

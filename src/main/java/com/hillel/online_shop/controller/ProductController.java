@@ -16,30 +16,30 @@ public class ProductController {
     @PostMapping("/create")
     public Long create(@RequestBody ProductDTO productDTO) {
 
-        return productService.createProduct(productDTO);
+        return productService.create(productDTO);
     }
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam(value = "id") Long id) {
 
-        productService.deleteProduct(id);
+        productService.delete(id);
     }
 
     @GetMapping("/get/{id}")
     public ProductDTO getProduct(@PathVariable Long id) {
 
-        return productService.getProductById(id);
+        return productService.getById(id);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/get-all")
     public List<ProductDTO> getProducts() {
 
-        return productService.getAllProducts();
+        return productService.getAll();
     }
 
     @PostMapping("/update")
     public Long update(@RequestBody ProductDTO productDTO) {
 
-        return productService.updateProduct(productDTO);
+        return productService.update(productDTO);
     }
 }

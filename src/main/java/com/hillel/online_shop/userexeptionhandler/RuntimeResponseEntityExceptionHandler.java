@@ -1,5 +1,7 @@
 package com.hillel.online_shop.userexeptionhandler;
 
+import com.hillel.online_shop.exception.ProductNotFoundException;
+import com.hillel.online_shop.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +13,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RuntimeResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {RuntimeException.class})
-    protected ResponseEntity<Object> handleConflict(RuntimeException e, WebRequest request) {
+    @ExceptionHandler(value = {ProductNotFoundException.class, UserNotFoundException.class})
+    protected ResponseEntity<Object> handleNotFound(Exception e, WebRequest request) {
         String bodyOfResponse = e.getMessage();
 
         return handleExceptionInternal(
                 e,
                 bodyOfResponse,
                 new HttpHeaders(),
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 request);
     }
 }

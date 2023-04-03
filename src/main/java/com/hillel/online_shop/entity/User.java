@@ -1,12 +1,14 @@
 package com.hillel.online_shop.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -21,7 +23,19 @@ public class User {
 
     private String email;
 
+    private String login;
+
+    private String password;
+
     @OneToOne(mappedBy = "user")
     private Cart cart;
+
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
+
+
+    public enum Role {
+        ROLE_ADMIN, ROLE_USER, ROLE_ANONYMOUS
+    }
 
 }
