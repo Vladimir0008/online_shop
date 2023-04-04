@@ -20,13 +20,15 @@ public class SecurityConfig {
                 request.
                         requestMatchers("/shop/products/get-all")
                         .hasAnyRole("USER")
-                        .requestMatchers("/shop/products/get/**", "/shop/users/get/")
+                        .requestMatchers("/shop/**")
                         .hasAnyRole("ADMIN")
                         .anyRequest()
                         .authenticated())
 
                 .formLogin()
                 .defaultSuccessUrl("/shop", true)
+                .and()
+                .httpBasic()
                 .and()
                 .logout();
 
