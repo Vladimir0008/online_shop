@@ -10,9 +10,9 @@ public class Test {
 
 //    public Test(UserService userService) {
 //        UserDTO userDTO = new UserDTO();
-//        userDTO.setPassword("root");
-//        userDTO.setLogin("root");
-//        userDTO.setRole(User.Role.ROLE_ADMIN);
+//        userDTO.setPassword("user");
+//        userDTO.setLogin("user");
+//        userDTO.setRole(User.Role.ROLE_USER);
 //        userService.create(userDTO);
 //    }
 }

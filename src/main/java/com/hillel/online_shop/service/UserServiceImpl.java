@@ -40,13 +40,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public Long create(UserDTO userDetails) {
-        if (userRepository.existsById(userDetails.getId())) {
-            throw new DuplicateKeyException("user with id " + userDetails.getId() + " already exists");
+    public Long create(UserDTO userDTO) {
+        if (userDTO.getId() != null) {
+            if (userRepository.existsById(userDTO.getId())) {
+                throw new DuplicateKeyException("user with id " + userDTO.getId() + " already exists");
+            }
         }
-        userDetails.setPassword(passwordEncoder.encode(userDetails.getPassword()));
-
-        return userRepository.save(map(userDetails)).getId();
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        return userRepository.save(map(userDTO)).getId();
     }
 
     @Override
@@ -72,11 +73,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .map(this::map)
                 .collect(Collectors.toList());
     }
-    
+
     public UserInfoDTO getInfoById(long id) {
         return mapInfo(findById(id));
     }
-    
+
     public List<UserInfoDTO> getAllInfo() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
                 .map(this::mapInfo)
