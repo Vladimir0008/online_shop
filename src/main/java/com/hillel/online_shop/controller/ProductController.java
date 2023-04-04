@@ -1,6 +1,7 @@
 package com.hillel.online_shop.controller;
 
 import com.hillel.online_shop.dto.ProductDTO;
+import com.hillel.online_shop.exception.TestException;
 import com.hillel.online_shop.service.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,10 @@ public class ProductController {
 
     @GetMapping("/get/{id}")
     public ProductDTO getProduct(@PathVariable Long id) {
-
         return productService.getProductById(id);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/get-all")
     public List<ProductDTO> getProducts() {
 
         return productService.getAllProducts();

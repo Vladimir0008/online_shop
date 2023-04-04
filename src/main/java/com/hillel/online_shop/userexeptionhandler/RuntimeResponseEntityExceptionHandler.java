@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RuntimeResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {RuntimeException.class})
+    @ExceptionHandler(value = {RuntimeException.class, IllegalArgumentException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException e, WebRequest request) {
         String bodyOfResponse = e.getMessage();
 
@@ -19,7 +19,8 @@ public class RuntimeResponseEntityExceptionHandler extends ResponseEntityExcepti
                 e,
                 bodyOfResponse,
                 new HttpHeaders(),
-                HttpStatus.CONFLICT,
+                HttpStatus.NOT_FOUND,
                 request);
     }
+
 }
