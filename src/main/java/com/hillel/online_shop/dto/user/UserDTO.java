@@ -1,4 +1,4 @@
-package com.hillel.online_shop.dto;
+package com.hillel.online_shop.dto.user;
 
 import com.hillel.online_shop.entity.User;
 import lombok.Data;

@@ -11,35 +11,31 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/shop/products")
 public class ProductController {
+
     private final ProductServiceImpl productService;
 
     @PostMapping("/create")
     public Long create(@RequestBody ProductDTO productDTO) {
-
         return productService.create(productDTO);
     }
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam(value = "id") Long id) {
-
         productService.delete(id);
     }
 
     @GetMapping("/get/{id}")
     public ProductDTO getProduct(@PathVariable Long id) {
-
         return productService.getById(id);
     }
 
     @GetMapping("/get-all")
     public List<ProductDTO> getProducts() {
-
         return productService.getAll();
     }
 
     @PostMapping("/update")
-    public Long update(@RequestBody ProductDTO productDTO) {
-
-        return productService.update(productDTO);
+    public void update(@RequestBody ProductDTO productDTO) {
+        productService.update(productDTO);
     }
 }

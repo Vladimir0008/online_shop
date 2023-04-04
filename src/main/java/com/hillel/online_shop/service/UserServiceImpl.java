@@ -1,11 +1,12 @@
 package com.hillel.online_shop.service;
 
-import com.hillel.online_shop.dto.UserDTO;
-import com.hillel.online_shop.dto.UserInfoDTO;
+import com.hillel.online_shop.dto.user.UserDTO;
+import com.hillel.online_shop.dto.user.UserInfoDTO;
 import com.hillel.online_shop.exception.UserNotFoundException;
 import com.hillel.online_shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +29,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         var byLogin = userRepository.findByLogin(username)
                 .orElseThrow(() -> new IllegalArgumentException("invalid login"));
 
@@ -37,55 +39,68 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .build();
     }
 
-    private void save(UserDTO userDetails) {
+    @Override
+    public Long create(UserDTO userDetails) {
+        if (userRepository.existsById(userDetails.getId())) {
+            throw new DuplicateKeyException("user with id " + userDetails.getId() + " already exists");
+        }
         userDetails.setPassword(passwordEncoder.encode(userDetails.getPassword()));
 
-        userRepository.save(modelMapper.map(userDetails, com.hillel.online_shop.entity.User.class));
-    }
-
-    public UserInfoDTO getAccountInfo(long id) {
-        return mapUserInfo(findById(id));
+        return userRepository.save(map(userDetails)).getId();
     }
 
     @Override
-    public UserDTO getById(long id) {
-        return mapUser(findById(id));
-    }
-
-    @Override
-    public List<UserDTO> getAll() {
-        return null;
-    }
-
-    @Override
-    public Long create(UserDTO userDTO) {
-        return null;
-    }
-
-    @Override
-    public Long update(UserDTO userDTO) {
-        return null;
+    public void update(UserDTO userDTO) {
+        findById(userDTO.getId());
+        userRepository.save(map(userDTO));
     }
 
     @Override
     public void delete(long id) {
-
+        findById(id);
+        userRepository.deleteById(id);
     }
 
-    private UserDTO mapUser(com.hillel.online_shop.entity.User user) {
-        return modelMapper.map(user, UserDTO.class);
+    @Override
+    public UserDTO getById(long id) {
+        return map(findById(id));
     }
 
-    private com.hillel.online_shop.entity.User mapUser(UserDTO productDTO) {
-        return modelMapper.map(productDTO, com.hillel.online_shop.entity.User.class);
+    @Override
+    public List<UserDTO> getAll() {
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+    
+    public UserInfoDTO getInfoById(long id) {
+        return mapInfo(findById(id));
+    }
+    
+    public List<UserInfoDTO> getAllInfo() {
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .map(this::mapInfo)
+                .collect(Collectors.toList());
     }
 
     private com.hillel.online_shop.entity.User findById(long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found!"));
+                .orElseThrow(() -> new UserNotFoundException("user with id " + id + " not found!"));
     }
 
-    private UserInfoDTO mapUserInfo(com.hillel.online_shop.entity.User user) {
-        return modelMapper.map(user, UserInfoDTO.class);
+    private UserDTO map(com.hillel.online_shop.entity.User user) {
+        return map(user, UserDTO.class);
+    }
+
+    private com.hillel.online_shop.entity.User map(UserDTO userDTO) {
+        return map(userDTO, com.hillel.online_shop.entity.User.class);
+    }
+
+    private UserInfoDTO mapInfo(com.hillel.online_shop.entity.User user) {
+        return map(user, UserInfoDTO.class);
+    }
+
+    private <T, U> T map(U source, Class<T> targetClass) {
+        return modelMapper.map(source, targetClass);
     }
 }

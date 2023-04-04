@@ -1,15 +1,18 @@
 package com.hillel.online_shop.config.security;
 
+import com.hillel.online_shop.dto.user.UserDTO;
+import com.hillel.online_shop.entity.User;
+import com.hillel.online_shop.service.UserService;
+import org.springframework.stereotype.Component;
+
+//@Component
 public class Test {
 
-   /* private UserService userService;
-
-    public Test(UserService userService) {
-        this.userService = userService;
-        UserDTO userDTO = new UserDTO();
-        userDTO.setPassword("12345");
-        userDTO.setLogin("test");
-        userDTO.setRole(User.Role.ROLE_ADMIN);
-        userService.save(userDTO);
-    }*/
+//    public Test(UserService userService) {
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setPassword("root");
+//        userDTO.setLogin("root");
+//        userDTO.setRole(User.Role.ROLE_ADMIN);
+//        userService.create(userDTO);
+//    }
 }

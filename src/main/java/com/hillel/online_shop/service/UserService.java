@@ -1,6 +1,6 @@
 package com.hillel.online_shop.service;
 
-import com.hillel.online_shop.dto.UserDTO;
+import com.hillel.online_shop.dto.user.UserDTO;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface UserService {
 
     Long create(UserDTO userDTO);
 
-    Long update(UserDTO userDTO);
+    void update(UserDTO userDTO);
 
     void delete(long id);
 }

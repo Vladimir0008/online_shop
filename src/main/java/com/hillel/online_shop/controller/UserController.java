@@ -1,7 +1,6 @@
 package com.hillel.online_shop.controller;
 
-import com.hillel.online_shop.dto.UserDTO;
-import com.hillel.online_shop.dto.UserInfoDTO;
+import com.hillel.online_shop.dto.user.UserInfoDTO;
 import com.hillel.online_shop.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,6 @@ public class UserController {
 
     @GetMapping("/get/{id}")
     public UserInfoDTO getUser(@PathVariable Long id) {
-        return userServiceImpl.getAccountInfo(id);
+        return userServiceImpl.getInfoById(id);
     }
 }
