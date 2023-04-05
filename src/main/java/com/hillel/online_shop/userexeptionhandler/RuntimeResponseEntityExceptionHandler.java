@@ -24,4 +24,16 @@ public class RuntimeResponseEntityExceptionHandler extends ResponseEntityExcepti
                 HttpStatus.NOT_FOUND,
                 request);
     }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    protected ResponseEntity<Object> handleBadRequest(Exception e, WebRequest request) {
+        String bodyOfResponse = e.getMessage();
+
+        return handleExceptionInternal(
+                e,
+                bodyOfResponse,
+                new HttpHeaders(),
+                HttpStatus.BAD_REQUEST,
+                request);
+    }
 }

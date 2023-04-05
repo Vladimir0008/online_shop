@@ -22,8 +22,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Long create(ProductDTO productDTO) {
-        if(productRepository.existsById(productDTO.getId())) {
-            throw new DuplicateKeyException("product with id " + productDTO.getId() + " already exists");
+        if (productDTO.getId() != null) {
+            throw new IllegalArgumentException("field \"id\" must be null");
         }
 
         return productRepository.save(map(productDTO)).getId();
@@ -31,6 +31,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void update(ProductDTO productDTO) {
+        if(productDTO.getId() == null) {
+            throw new IllegalArgumentException("field \"id\" must not be null");
+        }
         findById(productDTO.getId());
         productRepository.save(map(productDTO));
     }

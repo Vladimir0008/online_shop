@@ -42,9 +42,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public Long create(UserDTO userDTO) {
         if (userDTO.getId() != null) {
-            if (userRepository.existsById(userDTO.getId())) {
-                throw new DuplicateKeyException("user with id " + userDTO.getId() + " already exists");
-            }
+                throw new IllegalArgumentException("field \"id\" must be null");
         }
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return userRepository.save(map(userDTO)).getId();
@@ -52,6 +50,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public void update(UserDTO userDTO) {
+        if(userDTO.getId() == null) {
+            throw new IllegalArgumentException("field \"id\" must not be null");
+        }
         findById(userDTO.getId());
         userRepository.save(map(userDTO));
     }

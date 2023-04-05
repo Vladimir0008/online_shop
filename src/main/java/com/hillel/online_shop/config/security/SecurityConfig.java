@@ -17,19 +17,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
-                request.
-                        requestMatchers("/shop/products/get-all")
-                        .hasAnyRole("USER")
-                        .requestMatchers("/shop/**")
-                        .hasAnyRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
+                        request.
+                                requestMatchers("/shop/products/get-all").hasAnyRole("USER")
+                                .requestMatchers("/shop/**").hasAnyRole("ADMIN")
+                                .anyRequest()
+                                .authenticated())
 
                 .formLogin()
                 .defaultSuccessUrl("/shop", true)
                 .and()
                 .httpBasic()
                 .and()
+                .csrf().disable()
                 .logout();
 
         return httpSecurity.build();
@@ -37,7 +36,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
-        return new  BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
