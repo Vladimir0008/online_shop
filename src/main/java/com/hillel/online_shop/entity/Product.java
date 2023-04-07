@@ -22,4 +22,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Cart cart;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private UserOrder userOrder;
+    // TODO: 07.04.23 cascade type
 }
