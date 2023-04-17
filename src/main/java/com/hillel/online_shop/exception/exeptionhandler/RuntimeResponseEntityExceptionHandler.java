@@ -1,4 +1,4 @@
-package com.hillel.online_shop.userexeptionhandler;
+package com.hillel.online_shop.exception.exeptionhandler;
 
 import com.hillel.online_shop.exception.ProductNotFoundException;
 import com.hillel.online_shop.exception.UserNotFoundException;

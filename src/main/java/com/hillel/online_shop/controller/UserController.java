@@ -6,6 +6,7 @@ import com.hillel.online_shop.dto.user.UserInfoDTO;
 import com.hillel.online_shop.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,13 +23,18 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public Long create(@RequestBody UserDTO userDTO) {
+    public Long create(@Validated @RequestBody UserDTO userDTO) {
         return userServiceImpl.create(userDTO);
     }
 
-    @PostMapping("/update")
-    public void update(@RequestBody UserDTO userDTO) {
-        userServiceImpl.update(userDTO);
+    @PutMapping("/update/{id}")
+    public void update(@PathVariable Long id, @Validated @RequestBody UserDTO userDTO) {
+        UserDTO existUser = userServiceImpl.getById(id);
+
+        if (existUser != null) {
+            userDTO.setId(id);
+            userServiceImpl.update(userDTO);
+        }
     }
 
     @DeleteMapping("/delete")
