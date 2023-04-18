@@ -33,7 +33,7 @@ public class User {
     private Cart cart;
 
     @OneToMany(mappedBy = "user")
-    private List<UserOrder> userOrder;
+    private List<Order> order;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;

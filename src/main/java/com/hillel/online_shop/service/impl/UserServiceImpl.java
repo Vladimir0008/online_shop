@@ -1,9 +1,10 @@
-package com.hillel.online_shop.service;
+package com.hillel.online_shop.service.impl;
 
 import com.hillel.online_shop.dto.user.UserDTO;
 import com.hillel.online_shop.dto.user.UserInfoDTO;
 import com.hillel.online_shop.exception.UserNotFoundException;
 import com.hillel.online_shop.repository.UserRepository;
+import com.hillel.online_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DuplicateKeyException;

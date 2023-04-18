@@ -1,9 +1,10 @@
-package com.hillel.online_shop.service;
+package com.hillel.online_shop.service.impl;
 
 import com.hillel.online_shop.dto.ProductDTO;
 import com.hillel.online_shop.entity.Product;
 import com.hillel.online_shop.exception.ProductNotFoundException;
 import com.hillel.online_shop.repository.ProductRepository;
+import com.hillel.online_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DuplicateKeyException;

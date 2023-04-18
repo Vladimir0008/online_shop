@@ -14,7 +14,7 @@ public class Cart {
     private Long id;
 
     @OneToMany(mappedBy = "cart")
-    private List<Product> products;
+    private List<ProductInfo> productInfos;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

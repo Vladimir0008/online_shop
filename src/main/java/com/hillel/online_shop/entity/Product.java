@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,12 +20,7 @@ public class Product {
 
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
-    private Cart cart;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private UserOrder userOrder;
-    // TODO: 07.04.23 cascade type
+    @OneToMany(mappedBy = "product")
+    private List<ProductInfo> productInfos;
 }

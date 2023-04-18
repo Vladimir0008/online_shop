@@ -1,7 +1,7 @@
 package com.hillel.online_shop.controller;
 
 import com.hillel.online_shop.dto.ProductDTO;
-import com.hillel.online_shop.service.ProductServiceImpl;
+import com.hillel.online_shop.service.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

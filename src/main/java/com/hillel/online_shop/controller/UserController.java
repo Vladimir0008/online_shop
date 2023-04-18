@@ -1,9 +1,8 @@
 package com.hillel.online_shop.controller;
 
-import com.hillel.online_shop.dto.ProductDTO;
 import com.hillel.online_shop.dto.user.UserDTO;
 import com.hillel.online_shop.dto.user.UserInfoDTO;
-import com.hillel.online_shop.service.UserServiceImpl;
+import com.hillel.online_shop.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;

@@ -9,7 +9,8 @@ import java.util.List;
 
 @Entity
 @Data
-public class UserOrder {
+@Table(name = "orders")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +20,8 @@ public class UserOrder {
 
     private LocalDate date;
 
-    @OneToMany(mappedBy = "userOrder", fetch = FetchType.LAZY)
-    private List<Product> products;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private List<ProductInfo> productInfos;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

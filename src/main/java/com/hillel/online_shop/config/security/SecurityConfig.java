@@ -1,6 +1,6 @@
 package com.hillel.online_shop.config.security;
 
-import com.hillel.online_shop.service.UserServiceImpl;
+import com.hillel.online_shop.service.impl.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
