@@ -7,7 +7,6 @@ import com.hillel.online_shop.repository.ProductRepository;
 import com.hillel.online_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("field \"id\" must be null");
         }
 
-        return productRepository.save(map(productDTO)).getId();
+        return productRepository.save(modelMapper.map(productDTO,Product.class)).getId();
     }
 
     @Override
@@ -36,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("field \"id\" must not be null");
         }
         findById(productDTO.getId());
-        productRepository.save(map(productDTO));
+        productRepository.save(modelMapper.map(productDTO,Product.class));
     }
 
     @Override
@@ -47,13 +46,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getById(long id) {
-        return map(findById(id));
+        return modelMapper.map(findById(id), ProductDTO.class);
     }
 
     @Override
     public List<ProductDTO> getAll() {
         return StreamSupport.stream(productRepository.findAll().spliterator(), false)
-                .map(this::map)
+                .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
     }
 

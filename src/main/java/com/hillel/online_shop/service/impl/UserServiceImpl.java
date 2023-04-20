@@ -1,9 +1,11 @@
 package com.hillel.online_shop.service.impl;
 
+import com.hillel.online_shop.dto.CartDTO;
 import com.hillel.online_shop.dto.user.UserDTO;
 import com.hillel.online_shop.dto.user.UserInfoDTO;
 import com.hillel.online_shop.exception.UserNotFoundException;
 import com.hillel.online_shop.repository.UserRepository;
+import com.hillel.online_shop.service.CartService;
 import com.hillel.online_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -27,7 +29,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var byLogin = userRepository.findByLogin(username)
@@ -46,16 +47,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 throw new IllegalArgumentException("field \"id\" must be null");
         }
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        return userRepository.save(map(userDTO)).getId();
+        return userRepository.save(modelMapper.map(userDTO, com.hillel.online_shop.entity.User.class)).getId();
     }
 
     @Override
     public void update(UserDTO userDTO) {
-        if(userDTO.getId() == null) {
-            throw new IllegalArgumentException("field \"id\" must not be null");
-        }
         findById(userDTO.getId());
-        userRepository.save(map(userDTO));
+        if(userDTO.getPassword() != null) {
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+        userRepository.save(modelMapper.map(userDTO, com.hillel.online_shop.entity.User.class));
     }
 
     @Override
@@ -66,44 +67,28 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public UserDTO getById(long id) {
-        return map(findById(id));
+        return modelMapper.map(findById(id), UserDTO.class);
     }
 
     @Override
     public List<UserDTO> getAll() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
-                .map(this::map)
+                .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
     }
 
     public UserInfoDTO getInfoById(long id) {
-        return mapInfo(findById(id));
+        return modelMapper.map(findById(id), UserInfoDTO.class);
     }
 
     public List<UserInfoDTO> getAllInfo() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
-                .map(this::mapInfo)
+                .map(user -> modelMapper.map(user, UserInfoDTO.class))
                 .collect(Collectors.toList());
     }
 
     private com.hillel.online_shop.entity.User findById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("user with id " + id + " not found!"));
-    }
-
-    private UserDTO map(com.hillel.online_shop.entity.User user) {
-        return map(user, UserDTO.class);
-    }
-
-    private com.hillel.online_shop.entity.User map(UserDTO userDTO) {
-        return map(userDTO, com.hillel.online_shop.entity.User.class);
-    }
-
-    private UserInfoDTO mapInfo(com.hillel.online_shop.entity.User user) {
-        return map(user, UserInfoDTO.class);
-    }
-
-    private <T, U> T map(U source, Class<T> targetClass) {
-        return modelMapper.map(source, targetClass);
     }
 }

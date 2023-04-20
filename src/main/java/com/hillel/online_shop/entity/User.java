@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,8 @@ public class User {
     private String login;
 
     private String password;
+
+    private BigDecimal balance;
 
     @OneToOne(mappedBy = "user")
     private Cart cart;

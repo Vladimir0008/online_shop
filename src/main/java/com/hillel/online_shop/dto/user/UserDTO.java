@@ -1,12 +1,15 @@
 package com.hillel.online_shop.dto.user;
 
+import com.hillel.online_shop.dto.CartDTO;
+import com.hillel.online_shop.dto.OrderDTO;
 import com.hillel.online_shop.entity.User;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class UserDTO {
@@ -31,6 +34,12 @@ public class UserDTO {
     @Email
     private String email;
 
+    private BigDecimal balance;
+
     private User.Role role;
+
+    private CartDTO cartDTO;
+
+    private List<OrderDTO> order;
 
 }
