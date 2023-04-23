@@ -1,13 +1,13 @@
 package com.hillel.online_shop.service;
 
-import com.hillel.online_shop.dto.OrderDTO;
+import com.hillel.online_shop.dto.order.OrderRequestDTO;
 
 public interface OrderService {
-    OrderDTO getById(long id);
+    OrderRequestDTO getById(long id);
 
-    Long create(OrderDTO orderDTO);
+    Long create(OrderRequestDTO orderDTO);
 
-    void update(OrderDTO orderDTO);
+    void update(OrderRequestDTO orderDTO);
 
     void delete(long id);
 

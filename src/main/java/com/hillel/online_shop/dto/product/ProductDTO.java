@@ -1,14 +1,12 @@
-package com.hillel.online_shop.dto;
+package com.hillel.online_shop.dto.product;
 
-import com.hillel.online_shop.entity.Cart;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ProductDTO {
@@ -23,4 +21,6 @@ public class ProductDTO {
 
     @Range(min = 0, message = "Quantity must be greater or equal zero!")
     private int quantity;
+
+    private List<PurchaseDTO> purchases;
 }

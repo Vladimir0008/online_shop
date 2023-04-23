@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,8 @@ public class Order {
 
     private LocalDate date;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<ProductInfo> productInfos;
+    @OneToMany(mappedBy = "order")
+    private List<Purchase> purchases = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")

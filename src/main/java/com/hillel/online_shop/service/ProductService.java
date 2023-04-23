@@ -1,6 +1,6 @@
 package com.hillel.online_shop.service;
 
-import com.hillel.online_shop.dto.ProductDTO;
+import com.hillel.online_shop.dto.product.ProductDTO;
 
 import java.util.List;
 

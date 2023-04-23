@@ -1,18 +1,18 @@
 package com.hillel.online_shop.service;
 
-import com.hillel.online_shop.dto.user.UserDTO;
-
 import java.util.List;
 
-public interface UserService {
+public interface UserService<Request, Response> {
 
-    UserDTO getById(long id);
+    Response findById(long id);
 
-    List<UserDTO> getAll();
+    Response findByLogin(String login);
 
-    Long create(UserDTO userDTO);
+    List<Response> findAll();
 
-    void update(UserDTO userDTO);
+    Long create(Request request);
+
+    void update(Request request);
 
     void delete(long id);
 }

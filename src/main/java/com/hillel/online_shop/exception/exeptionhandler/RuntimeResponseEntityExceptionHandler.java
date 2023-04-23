@@ -2,6 +2,7 @@ package com.hillel.online_shop.exception.exeptionhandler;
 
 import com.hillel.online_shop.exception.ProductNotFoundException;
 import com.hillel.online_shop.exception.UserNotFoundException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class RuntimeResponseEntityExceptionHandler extends ResponseEntityExcepti
                 request);
     }
 
-    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ExceptionHandler(value = {IllegalArgumentException.class, DuplicateKeyException.class})
     protected ResponseEntity<Object> handleBadRequest(Exception e, WebRequest request) {
         String bodyOfResponse = e.getMessage();
 

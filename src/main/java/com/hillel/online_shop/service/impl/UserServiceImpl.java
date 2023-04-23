@@ -1,8 +1,9 @@
 package com.hillel.online_shop.service.impl;
 
-import com.hillel.online_shop.dto.CartDTO;
-import com.hillel.online_shop.dto.user.UserDTO;
-import com.hillel.online_shop.dto.user.UserInfoDTO;
+import com.hillel.online_shop.dto.cart.CartRequestDTO;
+import com.hillel.online_shop.dto.user.UserRequestDTO;
+import com.hillel.online_shop.dto.user.UserResponseDTO;
+import com.hillel.online_shop.entity.User;
 import com.hillel.online_shop.exception.UserNotFoundException;
 import com.hillel.online_shop.repository.UserRepository;
 import com.hillel.online_shop.service.CartService;
@@ -10,7 +11,6 @@ import com.hillel.online_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,18 +23,18 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserDetailsService, UserService {
+public class UserServiceImpl implements UserDetailsService, UserService<UserRequestDTO, UserResponseDTO> {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CartService cartService;
     private final ModelMapper modelMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var byLogin = userRepository.findByLogin(username)
                 .orElseThrow(() -> new IllegalArgumentException("invalid login"));
-
-        return User.builder()
+        return org.springframework.security.core.userdetails.User.builder()
                 .username(byLogin.getLogin())
                 .password(byLogin.getPassword())
                 .authorities(byLogin.getRole().name())
@@ -42,53 +42,55 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public Long create(UserDTO userDTO) {
-        if (userDTO.getId() != null) {
-                throw new IllegalArgumentException("field \"id\" must be null");
-        }
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        return userRepository.save(modelMapper.map(userDTO, com.hillel.online_shop.entity.User.class)).getId();
+    public UserResponseDTO findByLogin(String login) {
+        var byLogin = userRepository.findByLogin(login)
+                .orElseThrow(() -> new IllegalArgumentException("invalid login"));
+        return modelMapper.map(byLogin, UserResponseDTO.class);
     }
 
     @Override
-    public void update(UserDTO userDTO) {
-        findById(userDTO.getId());
-        if(userDTO.getPassword() != null) {
-            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+    public Long create(UserRequestDTO userRequestDTO) {
+        if (userRequestDTO.getId() != null && userRepository.existsById(userRequestDTO.getId())) {
+            throw new DuplicateKeyException("id " + userRequestDTO.getId() + " already exists");
         }
-        userRepository.save(modelMapper.map(userDTO, com.hillel.online_shop.entity.User.class));
+        userRequestDTO.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        User user = userRepository.save(modelMapper.map(userRequestDTO, User.class));
+        createCart(user);
+
+        return user.getId();
+    }
+
+    @Override
+    public void update(UserRequestDTO userDTO) {
+        userRepository.save(modelMapper.map(userDTO, User.class));
     }
 
     @Override
     public void delete(long id) {
-        findById(id);
         userRepository.deleteById(id);
     }
 
     @Override
-    public UserDTO getById(long id) {
-        return modelMapper.map(findById(id), UserDTO.class);
+    public UserResponseDTO findById(long id) {
+        return modelMapper.map(getById(id), UserResponseDTO.class);
     }
 
     @Override
-    public List<UserDTO> getAll() {
+    public List<UserResponseDTO> findAll() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
-                .map(user -> modelMapper.map(user, UserDTO.class))
+                .map(user -> modelMapper.map(user, UserResponseDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public UserInfoDTO getInfoById(long id) {
-        return modelMapper.map(findById(id), UserInfoDTO.class);
-    }
-
-    public List<UserInfoDTO> getAllInfo() {
-        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
-                .map(user -> modelMapper.map(user, UserInfoDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    private com.hillel.online_shop.entity.User findById(long id) {
+    private User getById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("user with id " + id + " not found!"));
+    }
+
+    private void createCart(User user) {
+        CartRequestDTO cartDTO = new CartRequestDTO();
+        cartDTO.setUser(modelMapper.map(user, UserRequestDTO.class));
+
+        cartService.create(cartDTO);
     }
 }

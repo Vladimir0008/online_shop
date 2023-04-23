@@ -22,5 +22,5 @@ public class Product {
 
 
     @OneToMany(mappedBy = "product")
-    private List<ProductInfo> productInfos;
+    private List<Purchase> purchases;
 }

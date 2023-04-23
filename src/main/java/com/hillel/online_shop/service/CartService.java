@@ -1,12 +1,13 @@
 package com.hillel.online_shop.service;
 
-import com.hillel.online_shop.dto.CartDTO;
-import com.hillel.online_shop.dto.user.UserDTO;
+import com.hillel.online_shop.dto.cart.CartRequestDTO;
 
 public interface CartService {
-    CartDTO getById(long id);
+    CartRequestDTO getById(long id);
 
-    Long create(UserDTO userDTO);
+    CartRequestDTO getByUserId(long userId);
 
-    void update(CartDTO cartDTO);
+    Long create(CartRequestDTO cartDTO);
+
+    void update(CartRequestDTO cartDTO);
 }

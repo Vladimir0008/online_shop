@@ -1,7 +1,7 @@
 package com.hillel.online_shop.dto.user;
 
-import com.hillel.online_shop.dto.CartDTO;
-import com.hillel.online_shop.dto.OrderDTO;
+import com.hillel.online_shop.dto.order.OrderRequestDTO;
+import com.hillel.online_shop.entity.Cart;
 import com.hillel.online_shop.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Positive;
@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class UserDTO {
+public class UserRequestDTO {
 
     private Long id;
 
@@ -25,7 +25,7 @@ public class UserDTO {
     @Size(min = 3, message = "Login must be longer than three!")
     private String login;
 
-    @Size(min = 8, message = "Password must be longer than three!")
+    @Size(min = 3, message = "Password must be longer than three!")
     private String password;
 
     @Positive(message = "Age must be greater than zero!")
@@ -37,9 +37,4 @@ public class UserDTO {
     private BigDecimal balance;
 
     private User.Role role;
-
-    private CartDTO cartDTO;
-
-    private List<OrderDTO> order;
-
 }

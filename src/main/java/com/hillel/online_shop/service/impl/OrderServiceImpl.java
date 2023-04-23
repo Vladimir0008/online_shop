@@ -1,6 +1,6 @@
 package com.hillel.online_shop.service.impl;
 
-import com.hillel.online_shop.dto.OrderDTO;
+import com.hillel.online_shop.dto.order.OrderRequestDTO;
 import com.hillel.online_shop.repository.OrderRepository;
 import com.hillel.online_shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +13,17 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public OrderDTO getById(long id) {
+    public OrderRequestDTO getById(long id) {
         return null;
     }
 
     @Override
-    public Long create(OrderDTO orderDTO) {
+    public Long create(OrderRequestDTO orderRequestDTO) {
         return null;
     }
 
     @Override
-    public void update(OrderDTO orderDTO) {
+    public void update(OrderRequestDTO orderRequestDTO) {
 
     }
 

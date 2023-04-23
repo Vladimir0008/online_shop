@@ -1,7 +1,6 @@
 package com.hillel.online_shop.service.impl;
 
-import com.hillel.online_shop.dto.CartDTO;
-import com.hillel.online_shop.dto.user.UserDTO;
+import com.hillel.online_shop.dto.cart.CartRequestDTO;
 import com.hillel.online_shop.entity.Cart;
 import com.hillel.online_shop.repository.CartRepository;
 import com.hillel.online_shop.service.CartService;
@@ -18,17 +17,22 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    public CartDTO getById(long id) {
-        return modelMapper.map(cartRepository.findById(id), CartDTO.class);
+    public CartRequestDTO getById(long id) {
+        return modelMapper.map(cartRepository.findById(id), CartRequestDTO.class);
     }
 
     @Override
-    public Long create(UserDTO userDTO) {
-        return cartRepository.save(modelMapper.map(userDTO, Cart.class)).getId();
+    public CartRequestDTO getByUserId(long userId) {
+        return modelMapper.map(cartRepository.findByUserId(userId), CartRequestDTO.class);
     }
 
     @Override
-    public void update(CartDTO cartDTO) {
-        cartRepository.save(modelMapper.map(cartDTO, Cart.class));
+    public Long create(CartRequestDTO cartRequestDTO) {
+        return cartRepository.save(modelMapper.map(cartRequestDTO, Cart.class)).getId();
+    }
+
+    @Override
+    public void update(CartRequestDTO cartRequestDTO) {
+        cartRepository.save(modelMapper.map(cartRequestDTO, Cart.class));
     }
 }

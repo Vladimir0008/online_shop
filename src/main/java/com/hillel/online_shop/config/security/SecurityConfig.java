@@ -17,12 +17,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
-                        request.
-                                requestMatchers("/shop/products/get-all").hasAnyRole("USER","ADMIN")
-                                .requestMatchers("/shop/**").hasAnyRole("ADMIN")
+                        request
+                                .requestMatchers("/shop/register/**").permitAll()
+                                .requestMatchers("/shop/products/get-all").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/shop/users/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/shop/customer/**").hasAnyRole("USER")
                                 .anyRequest()
                                 .authenticated())
-
                 .formLogin()
                 .defaultSuccessUrl("/shop", true)
                 .and()
@@ -30,7 +31,6 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .logout();
-
         return httpSecurity.build();
     }
 
@@ -40,10 +40,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider getDaoAuthenticationProvider(UserServiceImpl userDetailsService,
-                                                                  PasswordEncoder passwordEncoder) {
+    public DaoAuthenticationProvider getDaoAuthenticationProvider(UserServiceImpl userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+        daoAuthenticationProvider.setPasswordEncoder(getPasswordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         return daoAuthenticationProvider;
     }
