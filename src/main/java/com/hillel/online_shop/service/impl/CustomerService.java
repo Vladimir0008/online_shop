@@ -26,16 +26,15 @@ public class CustomerService {
     private final UserServiceImpl userService;
     private final ModelMapper modelMapper;
 
-    public void addToCart(Long userId, ProductDTO productDTO) {
-        ProductDTO byId = productService.getById(productDTO.getId());
-        if (byId.getQuantity() < productDTO.getQuantity()) {
+    public void addToCart(Long userId, Long productId, PurchaseDTO purchaseDTO) {
+        ProductDTO byId = productService.getById(purchaseDTO.getId());
+        if (byId.getQuantity() < purchaseDTO.getQuantity()) {
             throw new IllegalArgumentException("Not enough product quantity in storage"); //check quantity
         }
 
         CartRequestDTO cartRequestDTO = cartService.getByUserId(userId); //get cart
         List<PurchaseDTO> purchases = cartRequestDTO.getPurchases();
 
-        PurchaseDTO purchaseDTO = modelMapper.map(productDTO, PurchaseDTO.class);
         if (purchases.contains(purchaseDTO)) {
             PurchaseDTO purchase = purchases.get(purchases.indexOf(purchaseDTO));
             int newQuantity = purchase.getQuantity() + purchaseDTO.getQuantity();

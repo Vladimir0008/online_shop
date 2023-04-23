@@ -20,7 +20,7 @@ public class CustomerController {
 
     @PostMapping("/add-to-cart/{id}")
     public void addToCart(@PathVariable Long id, @RequestBody PurchaseDTO purchaseDTO) {
-        customerService.addToCart(getCurrentUserId(), , id);
+        customerService.addToCart(getCurrentUserId(), id, purchaseDTO);
     }
 
     @GetMapping("/get-cart")

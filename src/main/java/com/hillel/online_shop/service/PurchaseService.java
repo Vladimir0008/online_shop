@@ -16,6 +16,4 @@ public interface PurchaseService {
     void update(PurchaseDTO purchaseDTO);
 
     void delete(long id);
-
-    boolean existById(long id);
 }
