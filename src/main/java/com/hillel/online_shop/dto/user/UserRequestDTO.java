@@ -1,7 +1,5 @@
 package com.hillel.online_shop.dto.user;
 
-import com.hillel.online_shop.dto.order.OrderRequestDTO;
-import com.hillel.online_shop.entity.Cart;
 import com.hillel.online_shop.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Positive;
@@ -9,7 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 public class UserRequestDTO {

@@ -31,9 +31,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void update(ProductDTO productDTO) {
-        if (productDTO.getId() == null) {
-            throw new IllegalArgumentException("field \"id\" must not be null");
-        }
         findById(productDTO.getId());
         productRepository.save(modelMapper.map(productDTO, Product.class));
     }

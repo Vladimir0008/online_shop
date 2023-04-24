@@ -1,11 +1,11 @@
 package com.hillel.online_shop.controller;
 
-import com.hillel.online_shop.dto.cart.CartResponseDTO;
-import com.hillel.online_shop.dto.product.PurchaseDTO;
+import com.hillel.online_shop.dto.cart.CartDTO;
+import com.hillel.online_shop.dto.product.ProductDTO;
 import com.hillel.online_shop.dto.user.UserRequestDTO;
 import com.hillel.online_shop.dto.user.UserResponseDTO;
+import com.hillel.online_shop.service.CartService;
 import com.hillel.online_shop.service.UserService;
-import com.hillel.online_shop.service.impl.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,17 +15,22 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/shop/customer")
 public class CustomerController {
-    private final CustomerService customerService;
+    private final CartService cartService;
     private final UserService<UserRequestDTO, UserResponseDTO> userService;
 
-    @PostMapping("/add-to-cart/{id}")
-    public void addToCart(@PathVariable Long id, @RequestBody PurchaseDTO purchaseDTO) {
-        customerService.addToCart(getCurrentUserId(), id, purchaseDTO);
+    @PostMapping("/add-to-cart")
+    public void addToCart(@RequestBody ProductDTO productDTO) {
+        cartService.add(cartService.getByUserId(getCurrentUserId()).getId(), productDTO);
+    }
+
+    @PutMapping("/remove-from-cart")
+    public void removeFromCart(@RequestBody ProductDTO productDTO) {
+        cartService.remove(cartService.getByUserId(getCurrentUserId()).getId(), productDTO);
     }
 
     @GetMapping("/get-cart")
-    public CartResponseDTO getCart() {
-        return customerService.getCart(getCurrentUserId());
+    public CartDTO getCart() {
+        return cartService.getByUserId(getCurrentUserId());
     }
 
     private Long getCurrentUserId() {

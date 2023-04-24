@@ -1,6 +1,5 @@
 package com.hillel.online_shop.service.impl;
 
-import com.hillel.online_shop.dto.cart.CartRequestDTO;
 import com.hillel.online_shop.dto.user.UserRequestDTO;
 import com.hillel.online_shop.dto.user.UserResponseDTO;
 import com.hillel.online_shop.entity.User;
@@ -50,8 +49,8 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
 
     @Override
     public Long create(UserRequestDTO userRequestDTO) {
-        if (userRequestDTO.getId() != null && userRepository.existsById(userRequestDTO.getId())) {
-            throw new DuplicateKeyException("id " + userRequestDTO.getId() + " already exists");
+        if (userRequestDTO.getId() != null) {
+            throw new IllegalArgumentException("field \"id\" must be null");
         }
         userRequestDTO.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         User user = userRepository.save(modelMapper.map(userRequestDTO, User.class));
@@ -88,9 +87,6 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
     }
 
     private void createCart(User user) {
-        CartRequestDTO cartDTO = new CartRequestDTO();
-        cartDTO.setUser(modelMapper.map(user, UserRequestDTO.class));
-
-        cartService.create(cartDTO);
+        cartService.create(user.getId());
     }
 }

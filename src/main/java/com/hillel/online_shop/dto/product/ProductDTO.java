@@ -6,7 +6,6 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Range;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 public class ProductDTO {
@@ -20,7 +19,6 @@ public class ProductDTO {
     private BigDecimal price;
 
     @Range(min = 0, message = "Quantity must be greater or equal zero!")
-    private int quantity;
+    private Integer quantity;
 
-    private List<PurchaseDTO> purchases;
 }

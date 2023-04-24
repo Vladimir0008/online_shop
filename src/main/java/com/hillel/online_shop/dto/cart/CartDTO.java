@@ -1,15 +1,17 @@
 package com.hillel.online_shop.dto.cart;
 
-import com.hillel.online_shop.dto.product.PurchaseDTO;
+import com.hillel.online_shop.dto.product.ProductDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class CartResponseDTO {
+public class CartDTO {
+
+    private Long id;
 
     private BigDecimal cost;
 
-    private List<PurchaseDTO> purchases;
+    private List<ProductDTO> purchases;
 }
