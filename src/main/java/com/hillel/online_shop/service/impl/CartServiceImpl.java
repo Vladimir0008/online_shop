@@ -67,7 +67,8 @@ public class CartServiceImpl implements CartService {
         if (purchaseOpt.isPresent()) {
             purchase = purchaseOpt.get();
             purchase.setQuantity(purchase.getQuantity() + productDTO.getQuantity());
-            purchase.setPrice(purchase.getPrice().multiply(new BigDecimal(purchase.getQuantity())));
+            BigDecimal newPrice = product.getPrice().multiply(BigDecimal.valueOf(purchase.getQuantity()));
+            purchase.setPrice(newPrice);
         } else {
             purchase = new Purchase();
             purchase.setQuantity(productDTO.getQuantity());
