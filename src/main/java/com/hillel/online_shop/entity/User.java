@@ -26,6 +26,7 @@ public class User {
     @Column(unique = true)
     private String login;
 
+    @Column(name = "user_password")
     private String password;
 
     private BigDecimal balance;
@@ -38,6 +39,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 
+    @Column(name = "user_role")
     @Enumerated(value = EnumType.STRING)
     private Role role;
 

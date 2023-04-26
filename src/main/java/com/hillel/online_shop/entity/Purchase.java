@@ -17,6 +17,7 @@ public class Purchase {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
+    @Column(name = "purchase_name")
     private String name;
 
     private BigDecimal price;

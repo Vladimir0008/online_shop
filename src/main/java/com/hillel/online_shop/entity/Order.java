@@ -19,6 +19,7 @@ public class Order {
 
     private BigDecimal cost;
 
+    @Column(name = "create_date")
     private LocalDate date;
 
     @OneToMany(mappedBy = "order")
