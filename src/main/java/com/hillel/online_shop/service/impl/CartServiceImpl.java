@@ -69,7 +69,6 @@ public class CartServiceImpl implements CartService {
             purchase.setQuantity(purchase.getQuantity() + productDTO.getQuantity());
             BigDecimal newPrice = product.getPrice().multiply(BigDecimal.valueOf(purchase.getQuantity()));
             purchase.setPrice(newPrice);
-            System.out.println("add if exist " + newPrice);
         } else {
             purchase = new Purchase();
             purchase.setQuantity(productDTO.getQuantity());
@@ -77,7 +76,6 @@ public class CartServiceImpl implements CartService {
             purchase.setPrice(product.getPrice().multiply(BigDecimal.valueOf(productDTO.getQuantity())));
             purchase.setProduct(product);
             purchase.setCart(cart);
-            System.out.println("add if not exist" + purchase.getPrice());
         }
         purchaseRepository.save(purchase);
     }
