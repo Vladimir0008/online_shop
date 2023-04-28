@@ -124,8 +124,5 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
         if (userRequestDTO.getBalance() == null) {
             userRequestDTO.setBalance(user.getBalance());
         }
-        if (userRequestDTO.getRole() == null) {
-            userRequestDTO.setRole(user.getRole());
-        }
     }
 }
