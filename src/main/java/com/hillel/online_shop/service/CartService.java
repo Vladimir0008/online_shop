@@ -10,6 +10,8 @@ public interface CartService {
 
     Long create(Long userId);
 
+    void delete(Long id);
+
     void add(Long cartId, ProductDTO productDTO);
 
     void reduceQuantity(Long cartId, ProductDTO productDTO);

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,9 +68,11 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
         userRepository.save(modelMapper.map(userRequestDTO, User.class));
     }
 
+    @Transactional
     @Override
     public void delete(long id) {
-        getById(id);
+        User user = getById(id);
+        cartService.delete(user.getCart().getId());
         userRepository.deleteById(id);
     }
 
