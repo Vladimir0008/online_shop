@@ -37,7 +37,7 @@ public class UserController {
             throw new IllegalArgumentException("field role must be null");
         }
 
-        User.Role role = userRequestDTO.getRole();
+        User.Role role = userService.findById(id).getRole();
         validateRole(role);
 
         userService.findById(id);
