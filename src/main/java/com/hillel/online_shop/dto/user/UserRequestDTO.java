@@ -2,6 +2,7 @@ package com.hillel.online_shop.dto.user;
 
 import com.hillel.online_shop.entity.User;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -31,7 +32,7 @@ public class UserRequestDTO {
     @Email
     private String email;
 
-    @Positive(message = "Balance must be greater than zero!")
+    @Min(value = 0, message = "Balance must be greater than zero!")
     private BigDecimal balance;
 
     private User.Role role;

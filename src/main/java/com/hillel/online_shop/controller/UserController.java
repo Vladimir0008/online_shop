@@ -80,7 +80,7 @@ public class UserController {
         User.Role role = userService.findById(userId).getRole();
         validateRole(role);
         userService.block(userId);
-    } // TODO: 28.04.23 ERROR не видаляється з бд, кидає 403 
+    }
 
     @PutMapping("/unblock-user/{userId}")
     public void unblockUser(@PathVariable Long userId) {
