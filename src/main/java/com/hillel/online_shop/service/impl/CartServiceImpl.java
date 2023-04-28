@@ -5,6 +5,7 @@ import com.hillel.online_shop.dto.product.ProductDTO;
 import com.hillel.online_shop.entity.Cart;
 import com.hillel.online_shop.entity.Product;
 import com.hillel.online_shop.entity.Purchase;
+import com.hillel.online_shop.exception.CartNotFoundException;
 import com.hillel.online_shop.exception.ProductNotFoundException;
 import com.hillel.online_shop.exception.UserNotFoundException;
 import com.hillel.online_shop.repository.CartRepository;
@@ -15,11 +16,16 @@ import com.hillel.online_shop.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
@@ -54,6 +60,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public void add(Long cartId, ProductDTO productDTO) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() ->
                 new RuntimeException("Cart with id " + cartId + "not found"));
@@ -78,18 +85,43 @@ public class CartServiceImpl implements CartService {
             purchase.setCart(cart);
         }
         purchaseRepository.save(purchase);
+        updateCost(cartId);
     }
 
     @Override
+    @Transactional
     public void remove(Long cartId, ProductDTO productDTO) {
         Optional<Purchase> purchaseOpt = purchaseRepository.findByProductIdAndCartId(productDTO.getId(), cartId);
 
-        if (productDTO.getQuantity() == null) {
-            purchaseOpt.ifPresent(purchaseRepository::delete);
-        } else if (purchaseOpt.isPresent()) {
+//        if (productDTO.getQuantity() == null ) {
+//            purchaseOpt.ifPresent(purchaseRepository::delete);
+//        } else if (purchaseOpt.isPresent()) {
+//            Purchase purchase = purchaseOpt.get();
+//            purchase.setQuantity(purchase.getQuantity() - productDTO.getQuantity());
+//            purchaseRepository.save(purchase);
+//        }
+
+        if (purchaseOpt.isPresent()) {
             Purchase purchase = purchaseOpt.get();
-            purchase.setQuantity(purchase.getQuantity() - productDTO.getQuantity());
-            purchaseRepository.save(purchase);
+            Product product = productRepository.findById(productDTO.getId())
+                    .orElseThrow(()-> new ProductNotFoundException("Can't find product with id " + productDTO.getId()));
+
+            if (purchase.getQuantity() <= productDTO.getQuantity()) {
+                purchase.setQuantity(0);
+                purchase.setPrice(BigDecimal.ZERO);
+                purchaseRepository.save(purchase);
+
+                //purchaseRepository.deleteById(purchase.getId());
+            } else {
+                purchase.setQuantity(purchase.getQuantity() - productDTO.getQuantity());
+                purchase.setPrice(product.getPrice().multiply(BigDecimal.valueOf(purchase.getQuantity())));
+                purchaseRepository.save(purchase);
+            }
+
+            updateCost(cartId);
+            updatePurchases();
+        } else {
+            throw new ProductNotFoundException("Can't find product with id " + productDTO.getId() + " in cart with id " + cartId);
         }
     }
 
@@ -99,4 +131,28 @@ public class CartServiceImpl implements CartService {
     }
 
     // TODO: 24.04.23 implement cost update in cart
+
+    private void updateCost(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException("Can't find cart with id " + cartId));
+
+        List<Purchase> purchases = purchaseRepository.findAllByCartId(cartId);
+
+        BigDecimal sumCost = purchases.stream()
+                .map(Purchase::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        cart.setCost(sumCost);
+        cartRepository.save(cart);
+    }
+
+    private void updatePurchases() {
+        List<Purchase> purchases = (List<Purchase>)purchaseRepository.findAll();
+
+        List<Purchase> purchaseList = purchases.stream()
+                .filter(purchase -> Objects.equals(purchase.getQuantity(), 0))
+                .collect(Collectors.toList());
+
+        purchaseRepository.deleteAll(purchaseList);
+    }
 }

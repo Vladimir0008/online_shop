@@ -29,7 +29,7 @@ public class User {
     @Column(name = "user_password")
     private String password;
 
-    private BigDecimal balance;
+    private BigDecimal balance = new BigDecimal("0.0");
 
     private boolean isBlocked;
 
