@@ -1,5 +1,6 @@
 package com.hillel.online_shop.dto.user;
 
+import com.hillel.online_shop.entity.User;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,5 +21,7 @@ public class UserResponseDTO {
     private String email;
 
     private BigDecimal balance;
+
+    private User.Role role;
 
 }

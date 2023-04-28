@@ -9,7 +9,6 @@ import com.hillel.online_shop.service.CartService;
 import com.hillel.online_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -60,13 +59,24 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
     }
 
     @Override
-    public void update(UserRequestDTO userDTO) {
-        userRepository.save(modelMapper.map(userDTO, User.class));
+    public void update(UserRequestDTO userRequestDTO) {
+        if (userRequestDTO.getPassword() != null) {
+            userRequestDTO.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        }
+        safeFill(userRequestDTO);
+        userRepository.save(modelMapper.map(userRequestDTO, User.class));
     }
 
     @Override
     public void delete(long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void block(long id) {
+        User user = getById(id);
+        user.setBlocked(true);
+        userRepository.save(user);
     }
 
     @Override
@@ -88,5 +98,34 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
 
     private void createCart(User user) {
         cartService.create(user.getId());
+    }
+
+    private void safeFill(UserRequestDTO userRequestDTO) {
+        User user = getById(userRequestDTO.getId());
+
+        if (userRequestDTO.getFirstName() == null) {
+            userRequestDTO.setFirstName(user.getFirstName());
+        }
+        if (userRequestDTO.getLastName() == null) {
+            userRequestDTO.setLastName(user.getLastName());
+        }
+        if (userRequestDTO.getLogin() == null) {
+            userRequestDTO.setLogin(user.getLogin());
+        }
+        if (userRequestDTO.getPassword() == null) {
+            userRequestDTO.setPassword(user.getPassword());
+        }
+        if (userRequestDTO.getAge() == null) {
+            userRequestDTO.setAge(user.getAge());
+        }
+        if (userRequestDTO.getEmail() == null) {
+            userRequestDTO.setEmail(user.getEmail());
+        }
+        if (userRequestDTO.getBalance() == null) {
+            userRequestDTO.setBalance(user.getBalance());
+        }
+        if (userRequestDTO.getRole() == null) {
+            userRequestDTO.setRole(user.getRole());
+        }
     }
 }

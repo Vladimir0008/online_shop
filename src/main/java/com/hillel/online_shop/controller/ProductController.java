@@ -2,7 +2,6 @@ package com.hillel.online_shop.controller;
 
 import com.hillel.online_shop.dto.product.ProductDTO;
 import com.hillel.online_shop.service.ProductService;
-import com.hillel.online_shop.service.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +26,17 @@ public class ProductController {
 
     @GetMapping("/get/{id}")
     public ProductDTO getProduct(@PathVariable Long id) {
-        return productService.getById(id);
+        return productService.findById(id);
     }
 
     @GetMapping("/get-all")
     public List<ProductDTO> getProducts() {
-        return productService.getAll();
+        return productService.findAll();
     }
 
     @PutMapping("/update/{id}")
     public void update(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO) {
-        ProductDTO existProduct = productService.getById(id);
+        ProductDTO existProduct = productService.findById(id);// TODO: 28.04.23
         productDTO.setId(id);
         productService.update(productDTO);
     }

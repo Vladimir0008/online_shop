@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS purchase
     purchase_name VARCHAR(255)   NOT NULL,
     price         DECIMAL(10, 2) NOT NULL,
     quantity      INT(10)        NOT NULL,
-    cart_id       INT(10)        NOT NULL,
+    cart_id       INT(10),
     order_id      INT(10),
     PRIMARY KEY (id),
     FOREIGN KEY (product_id) REFERENCES product (id),

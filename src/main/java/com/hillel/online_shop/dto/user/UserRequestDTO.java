@@ -26,11 +26,12 @@ public class UserRequestDTO {
     private String password;
 
     @Positive(message = "Age must be greater than zero!")
-    private int age;
+    private Integer age;
 
     @Email
     private String email;
 
+    @Positive(message = "Balance must be greater than zero!")
     private BigDecimal balance;
 
     private User.Role role;

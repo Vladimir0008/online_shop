@@ -5,9 +5,9 @@ import com.hillel.online_shop.dto.product.ProductDTO;
 import java.util.List;
 
 public interface ProductService {
-    ProductDTO getById(long id);
+    ProductDTO findById(long id);
 
-    List<ProductDTO> getAll();
+    List<ProductDTO> findAll();
 
     Long create(ProductDTO productDTO);
 

@@ -2,13 +2,12 @@ package com.hillel.online_shop.service;
 
 import com.hillel.online_shop.dto.order.OrderDTO;
 
+import java.util.List;
+
 public interface OrderService {
-    OrderDTO getById(long id);
+    OrderDTO findById(long id);
 
-    Long create(OrderDTO orderDTO);
+    List<OrderDTO> findAllByUserId(long userId);
 
-    void update(OrderDTO orderDTO);
-
-    void delete(long id);
-
+    Long create(Long userId, OrderDTO orderDTO);
 }

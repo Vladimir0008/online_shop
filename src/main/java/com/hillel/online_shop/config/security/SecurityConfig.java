@@ -19,8 +19,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(request ->
                         request
                                 .requestMatchers("/shop/register/**").permitAll()
-                                .requestMatchers("/shop/products/get-all").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/shop/users/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/shop/products/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                                .requestMatchers("/shop/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                                .requestMatchers("/shop/users/make-user-admin/*").hasAnyRole("SUPER_ADMIN")
                                 .requestMatchers("/shop/customer/**").hasAnyRole("USER")
                                 .anyRequest()
                                 .authenticated())

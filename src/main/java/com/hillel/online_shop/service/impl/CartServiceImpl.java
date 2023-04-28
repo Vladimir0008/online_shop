@@ -34,7 +34,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    public CartDTO getById(long id) {
+    public CartDTO findById(long id) {
         Cart cart = cartRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         cartDTO.setCost(getCost(cart));
@@ -42,7 +42,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO getByUserId(long userId) {
+    public CartDTO findByUserId(long userId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(EntityNotFoundException::new);
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         cartDTO.setCost(getCost(cart));
@@ -52,14 +52,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public Long create(Long userId) {
         Cart cart = new Cart();
-        cart.setUser(userRepository.findById(userId).orElseThrow(() ->
-                new UserNotFoundException("user with id " + userId + "not found")));
+        cart.setUser(userRepository.findById(userId).orElseThrow(EntityNotFoundException::new));
         return cartRepository.save(cart).getId();
-    }
-
-    @Override
-    public void update(CartDTO cartDTO) {
-        cartRepository.save(modelMapper.map(cartDTO, Cart.class));
     }
 
     @Override
@@ -83,50 +77,23 @@ public class CartServiceImpl implements CartService {
             purchase.setPrice(product.getPrice().multiply(BigDecimal.valueOf(productDTO.getQuantity())));
             purchase.setProduct(product);
             purchase.setCart(cart);
-//            cart.getPurchases().add(purchase);
             System.out.println("add if not exist" + purchase.getPrice());
         }
         purchaseRepository.save(purchase);
-//        cart.setCost(getCost(cart));
-//        cartRepository.save(cart);
     }
-
-
-//    @Transactional
-//    public void remove(Long cartId, ProductDTO productDTO) {
-//        BigDecimal price = findProductById(productDTO.getId()).getPrice();
-//        Optional<Purchase> purchaseOpt = purchaseRepository.findByProductIdAndCartId(productDTO.getId(), cartId);
-//        Cart cart = findCartById(cartId);
-//
-//        if (purchaseOpt.isPresent()) {
-//            if (productDTO.getQuantity() > purchaseOpt.get().getQuantity()) {
-//                throw new IllegalArgumentException("not enough quantity to remove");
-//            }
-//            if (productDTO.getQuantity() == null || productDTO.getQuantity() == purchaseOpt.get().getQuantity()) {
-//                cart.getPurchases().remove(purchaseOpt.get());
-//                purchaseRepository.delete(purchaseOpt.get());
-//            } else {
-//                Purchase purchase = purchaseOpt.get();
-//                purchase.setQuantity(purchase.getQuantity() - productDTO.getQuantity());
-//                BigDecimal newPrice = price.multiply(BigDecimal.valueOf(purchase.getQuantity()));
-//                purchase.setPrice(newPrice);
-//                purchaseRepository.save(purchase);
-//            }
-//        }
-//        cart.setCost(getCost(cart));
-//        cartRepository.save(cart); }
 
     @Override
     public void remove(Long cartId, Long productId) {
-        Purchase purchase = purchaseRepository.findByProductIdAndCartId(productId, cartId)
-                .orElseThrow(EntityNotFoundException::new);
+        Purchase purchase = purchaseRepository.findByProductIdAndCartId(productId, cartId).orElseThrow(() ->
+                        new ProductNotFoundException("Product with id " + productId + " is not in the cart"));
         purchaseRepository.delete(purchase);
     }
 
     @Override
     public void reduceQuantity(Long cartId, ProductDTO productDTO) {
         Purchase purchase = purchaseRepository.findByProductIdAndCartId(productDTO.getId(), cartId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() ->
+                        new ProductNotFoundException("Product with id " + productDTO.getId() + "is not in the cart"));
         BigDecimal price = findProductById(productDTO.getId()).getPrice();
 
         if (productDTO.getQuantity() >= purchase.getQuantity()) {
@@ -161,6 +128,6 @@ public class CartServiceImpl implements CartService {
 
     private Cart findCartById(Long id) {
         return cartRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Cart with id " + id + " not found"));
+                .orElseThrow(EntityNotFoundException::new);
     }
 }
