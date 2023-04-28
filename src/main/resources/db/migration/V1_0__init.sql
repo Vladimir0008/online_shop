@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS user
 CREATE TABLE IF NOT EXISTS cart
 (
     id      INT            AUTO_INCREMENT,
-    cost    DECIMAL(10, 2) DEFAULT 0,
     user_id INT,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user (id)
@@ -51,8 +50,8 @@ CREATE TABLE IF NOT EXISTS purchase
     cart_id       INT(10)        NOT NULL,
     order_id      INT(10),
     PRIMARY KEY (id),
-    FOREIGN KEY (product_id) REFERENCES Product (id),
-    FOREIGN KEY (cart_id) REFERENCES Cart (id),
-    FOREIGN KEY (order_id) REFERENCES Orders (id)
+    FOREIGN KEY (product_id) REFERENCES product (id),
+    FOREIGN KEY (cart_id) REFERENCES cart (id),
+    FOREIGN KEY (order_id) REFERENCES orders (id)
 );
 

@@ -20,22 +20,36 @@ public class CustomerController {
 
     @PostMapping("/add-to-cart")
     public void addToCart(@RequestBody ProductDTO productDTO) {
-        cartService.add(cartService.getByUserId(getCurrentUserId()).getId(), productDTO);
+        cartService.add(getCartId(), productDTO);
     }
 
-    @PutMapping("/remove-from-cart")
-    public void removeFromCart(@RequestBody ProductDTO productDTO) {
-        cartService.remove(cartService.getByUserId(getCurrentUserId()).getId(), productDTO);
+    @DeleteMapping("/remove-from-cart/{productId}")
+    public void removeFromCart(@PathVariable Long productId) {
+        cartService.remove(getCartId(), productId);
+    }
+
+    @PutMapping("/reduce-product-from-cart")
+    public void reduceProductFromCart(@RequestBody ProductDTO productDTO) {
+        cartService.reduceQuantity(getCartId(), productDTO);
     }
 
     @GetMapping("/get-cart")
     public CartDTO getCart() {
-        return cartService.getByUserId(getCurrentUserId());
+        return cartService.getById(getCartId());
+    }
+
+    @DeleteMapping("/clear-cart")
+    public void clearCart() {
+        cartService.clear(getCartId());
     }
 
     private Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String login = auth.getName();
         return userService.findByLogin(login).getId();
+    }
+
+    private Long getCartId() {
+        return cartService.getByUserId(getCurrentUserId()).getId();
     }
 }

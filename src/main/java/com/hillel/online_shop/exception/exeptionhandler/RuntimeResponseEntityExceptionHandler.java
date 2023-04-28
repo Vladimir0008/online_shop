@@ -3,6 +3,7 @@ package com.hillel.online_shop.exception.exeptionhandler;
 import com.hillel.online_shop.exception.CartNotFoundException;
 import com.hillel.online_shop.exception.ProductNotFoundException;
 import com.hillel.online_shop.exception.UserNotFoundException;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RuntimeResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {
+    @ExceptionHandler(value = {EntityExistsException.class,
             ProductNotFoundException.class,
             UserNotFoundException.class,
             CartNotFoundException.class})
