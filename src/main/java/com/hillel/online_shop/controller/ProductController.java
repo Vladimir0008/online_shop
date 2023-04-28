@@ -1,8 +1,9 @@
 package com.hillel.online_shop.controller;
 
-import com.hillel.online_shop.dto.ProductDTO;
-import com.hillel.online_shop.service.ProductServiceImpl;
+import com.hillel.online_shop.dto.product.ProductDTO;
+import com.hillel.online_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,35 +12,32 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/shop/products")
 public class ProductController {
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
 
     @PostMapping("/create")
-    public Long create(@RequestBody ProductDTO productDTO) {
-
-        return productService.createProduct(productDTO);
+    public Long create(@Validated @RequestBody ProductDTO productDTO) {
+        return productService.create(productDTO);
     }
 
     @DeleteMapping("/delete")
     public void delete(@RequestParam(value = "id") Long id) {
-
-        productService.deleteProduct(id);
+        productService.delete(id);
     }
 
     @GetMapping("/get/{id}")
     public ProductDTO getProduct(@PathVariable Long id) {
-
-        return productService.getProductById(id);
+        return productService.findById(id);
     }
 
-    @GetMapping("/get_all")
+    @GetMapping("/get-all")
     public List<ProductDTO> getProducts() {
-
-        return productService.getAllProducts();
+        return productService.findAll();
     }
 
-    @PostMapping("/update")
-    public Long update(@RequestBody ProductDTO productDTO) {
-
-        return productService.updateProduct(productDTO);
+    @PutMapping("/update/{id}")
+    public void update(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO) {
+        ProductDTO existProduct = productService.findById(id);// TODO: 28.04.23
+        productDTO.setId(id);
+        productService.update(productDTO);
     }
 }

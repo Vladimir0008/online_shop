@@ -1,13 +1,18 @@
 package com.hillel.online_shop.service;
 
-import com.hillel.online_shop.dto.ProductDTO;
+import com.hillel.online_shop.dto.product.ProductDTO;
 
 import java.util.List;
 
 public interface ProductService {
-    ProductDTO getProductById(long id);
-    List<ProductDTO> getAllProducts();
-    Long createProduct(ProductDTO productDTO);
-    Long updateProduct(ProductDTO productDTO);
-    void deleteProduct(long id);
+    ProductDTO findById(long id);
+
+    List<ProductDTO> findAll();
+
+    Long create(ProductDTO productDTO);
+
+    void update(ProductDTO productDTO);
+
+    void delete(long id);
 }
+

@@ -1,13 +1,13 @@
-package com.hillel.online_shop.dto;
+package com.hillel.online_shop.dto.product;
 
-import com.hillel.online_shop.entity.Cart;
 import lombok.Data;
 
 import java.math.BigDecimal;
-@Data
-public class ProductDTO {
 
-    private Long id;
+@Data
+public class PurchaseDTO {
+
+    private Long productId;
 
     private String name;
 

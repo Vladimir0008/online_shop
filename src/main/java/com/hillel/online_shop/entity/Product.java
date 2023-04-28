@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -13,13 +14,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "product_name")
     private String name;
 
     private BigDecimal price;
 
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
-    private Cart cart;
+
+    @OneToMany(mappedBy = "product")
+    private List<Purchase> purchases;
 }
