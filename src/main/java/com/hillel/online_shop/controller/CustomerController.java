@@ -95,6 +95,10 @@ public class CustomerController {
 
     @PutMapping("/set-balance")
     public void setBalance(@RequestParam BigDecimal balance) {
+        if(balance.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("balance must be positive");
+        }
+
         UserRequestDTO userRequestDTO = new UserRequestDTO();
         userRequestDTO.setId(getCurrentUserId());
         userRequestDTO.setBalance(balance);

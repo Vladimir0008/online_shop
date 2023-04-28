@@ -17,5 +17,7 @@ public interface UserService<Request, Response> {
     void delete(long id);
 
     void block(long id);
+
+    void unblock(long id);
 }
 

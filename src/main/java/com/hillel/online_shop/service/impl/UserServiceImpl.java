@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
 
     @Override
     public void delete(long id) {
+        getById(id);
         userRepository.deleteById(id);
     }
 
@@ -76,6 +77,13 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
     public void block(long id) {
         User user = getById(id);
         user.setBlocked(true);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void unblock(long id) {
+        User user = getById(id);
+        user.setBlocked(false);
         userRepository.save(user);
     }
 
