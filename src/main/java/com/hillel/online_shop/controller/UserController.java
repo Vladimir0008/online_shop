@@ -65,14 +65,13 @@ public class UserController {
 
     @PutMapping("/make-user-admin/{userId}")
     public void makeUserAdmin(@PathVariable Long userId) {
+        validateSuperAdminRole();
+
         if (!userService.findById(userId).getRole().equals(User.Role.ROLE_USER)) {
             throw new IllegalArgumentException("User role must be ROLE_USER");
         }
 
-        UserRequestDTO userRequestDTO = new UserRequestDTO();
-        userRequestDTO.setId(userId);
-        userRequestDTO.setRole(User.Role.ROLE_ADMIN);
-        userService.update(userRequestDTO);
+        userService.makeUserAdmin(userId);
     }
 
     @PutMapping("/block-user/{userId}")

@@ -36,7 +36,6 @@ public class ProductController {
 
     @PutMapping("/update/{id}")
     public void update(@PathVariable Long id, @Validated @RequestBody ProductDTO productDTO) {
-        ProductDTO existProduct = productService.findById(id);// TODO: 28.04.23
         productDTO.setId(id);
         productService.update(productDTO);
     }

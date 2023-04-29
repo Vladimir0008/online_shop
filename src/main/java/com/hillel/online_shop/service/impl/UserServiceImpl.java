@@ -91,6 +91,13 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
     }
 
     @Override
+    public void makeUserAdmin(long id) {
+        User user = getById(id);
+        user.setRole(User.Role.ROLE_ADMIN);
+        userRepository.save(user);
+    }
+
+    @Override
     public UserResponseDTO findById(long id) {
         return modelMapper.map(getById(id), UserResponseDTO.class);
     }

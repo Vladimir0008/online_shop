@@ -19,5 +19,7 @@ public interface UserService<Request, Response> {
     void block(long id);
 
     void unblock(long id);
+
+    void makeUserAdmin(long id);
 }
 

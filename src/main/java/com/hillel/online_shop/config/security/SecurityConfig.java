@@ -21,7 +21,6 @@ public class SecurityConfig {
                                 .requestMatchers("/shop/register/**").permitAll()
                                 .requestMatchers("/shop/products/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                                 .requestMatchers("/shop/users/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-                                .requestMatchers("/shop/users/make-user-admin/*").hasAnyRole("SUPER_ADMIN")
                                 .requestMatchers("/shop/customer/**").hasAnyRole("USER")
                                 .anyRequest()
                                 .authenticated())
