@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
     }
 
     @Override
+    @Transactional
     public Long create(UserRequestDTO userRequestDTO) {
         if (userRequestDTO.getId() != null) {
             throw new IllegalArgumentException("field \"id\" must be null");
@@ -63,17 +64,9 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
     public void update(UserRequestDTO userRequestDTO) {
         if (userRequestDTO.getPassword() != null) {
             userRequestDTO.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
-        }
+        } // TODO: 29.04.23 if password is blank
         safeFill(userRequestDTO);
         userRepository.save(modelMapper.map(userRequestDTO, User.class));
-    }
-
-    @Transactional
-    @Override
-    public void delete(long id) {
-        User user = getById(id);
-        cartService.delete(user.getCart().getId());
-        userRepository.deleteById(id);
     }
 
     @Override
@@ -81,6 +74,14 @@ public class UserServiceImpl implements UserDetailsService, UserService<UserRequ
         User user = getById(id);
         user.setBlocked(true);
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void delete(long id) {
+        User user = getById(id);
+        cartService.delete(user.getCart().getId());
+        userRepository.deleteById(id);
     }
 
     @Override
